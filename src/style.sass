@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:100,300,400,700&display=swap')
+@import url('//cdn.materialdesignicons.com/4.5.95/css/materialdesignicons.min.css')
+
+*
+  box-sizing: border-box
+  &::-webkit-scrollbar-track
+    box-shadow: inset 0 0 4px rgba(#424242, 0.3)
+    border-radius: 2px
+    background-color: lighten(#303030, 5%)
+  &::-webkit-scrollbar
+    width: 5px
+    background-color: #303030
+  &::-webkit-scrollbar-thumb
+    border-radius: 2px
+    box-shadow: inset 0 0 4px rgba(#424242 ,.3)
+    background-color: lighten(#424242,30%)
+
+body
+  margin: 0
+  padding: 0
+  background-color: #FCFCFC
+
+.mh100vh
+  min-height: 100vh
+
+.mw100
+  min-width: 100%
+
+h1
+  font-weight: normal
+
+#app
+  font-family: 'Montserrat', "Avenir", Helvetica, Arial, sans-serif
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  text-align: center
+  color: #2c3e50
+
+a
+  text-decoration: none
+
+#nav
+  padding: 30px
+
+  *
+    font-weight: bold
+    color: #2c3e50
+    cursor: pointer
+
+    &.router-link-exact-active
+      color: #42b983
+
+.flex
+  display: flex
+  &.columt
+    flex-direction: column
+
+.spacer
+  flex-grow: 1
+
+.block
+  display: block
+
+.justify-center
+  justify-content: center
+
+.align-center
+  align-items: center
+
+.text-right
+  text-align: right
+
+.text-center
+  text-align: center
+
+.text-left
+  text-align: left
+
+.container
+  padding: 1rem
+
+.subtitle
+  font-weight: 300
+  font-size: .8rem
+
+.mr-2
+  margin-right: 1em
+
+// tables
+table
+  margin: 0 auto
+  border-collapse: collapse
+
+  th.sorted
+    cursor: pointer
+    &.sort::after
+      content: ""
+      display: inline-block
+      margin: 0 5px
+      border: 5px transparent solid
+      border-top: 5px solid red
+    &.sort.down::after
+      border: 5px transparent solid
+      border-bottom: 5px solid red
+
+  th, td
+    padding: 5px
+  tbody
+    tr
+      &:nth-child(even)
+        background-color: rgba(#3d3d3d, .05)
+      &:hover
+        background-color: rgba(0,0,0,.1)
+    td
+      border: 1px solid rgba(0,0,0,.2)
+  .mdi
+    cursor: pointer
+    margin: 0 5px
+    display: inline-block
+    transition: transform 200ms
+    &:hover
+      transform: scale(1.2)
+
+// colors
+
+.grey
+  color: grey
+
+.red
+  color: red
+
+.blue
+  color: blue
+
+.thin
+  font-weight: 200
+
+form
+  input, button, textarea
+    padding: .5rem 1rem
+    margin-top: 0.5rem
+    width: 100%
+    border: none
+    background-color: aliceblue
+
+  ::placeholder
+    color: grey
+    opacity: .3
+
+  button
+    border-radius: 5px
+    text-transform: uppercase
+    transition: box-shadow 200ms ease
+    cursor: pointer
+    &.back
+      background-color: rgba(0,0,0,.05)
+    &:hover
+      box-shadow: 0 0 5px rgba(0,0,0,0.1)
+    &:disabled
+      background-color: rgba(0,0,0,.05)
+      cursor: progress

@@ -1,5 +1,6 @@
 #rusic
 .temp
+# /src/plugins/firabase.js
 
 .DS_Store
 node_modules

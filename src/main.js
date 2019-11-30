@@ -3,18 +3,38 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import firebase from "./plugins/firebase";
+import axios from "axios";
 
 Vue.config.productionTip = false;
+Vue.prototype.$axios = axios;
 
-window.axios = require("axios");
-window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-
-firebase.auth().onAuthStateChanged(function(user) {
-  console.log(user);
+Vue.filter("toDateTime", function(value) {
+  if (value) {
+    const date = new Date(value);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  }
 });
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount("#app");
+let project;
+
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    store.dispatch("setUser", user);
+    router.push("/");
+  }
+
+  if (project) {
+    return;
+  }
+  new Vue({
+    firebase,
+    router,
+    store,
+    render: h => h(App)
+  }).$mount("#app");
+});
