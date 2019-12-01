@@ -51,6 +51,26 @@
           </td>
         </tr>
       </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5" class="text-right">
+            строк на листе
+            <select v-model="rowOnPage">
+              <option v-for="n in rowsCount" :key="n" :value="n">
+                {{ n }}
+              </option>
+            </select>
+            из {{ rowsCount }}
+            <div class="paginstion">
+              <vialan-pagination
+                :rowOnPage="rowOnPage"
+                :rowsCount="rowsCount"
+                @click="paginationClick"
+              ></vialan-pagination>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </template>
@@ -58,30 +78,41 @@
 <script>
 import { mapGetters } from "vuex";
 import vialanLoader from "@/components/Loader.vue";
+import vialanPagination from "@/components/Pagination";
 
 export default {
   name: "home",
-  components: { vialanLoader },
+  components: { vialanLoader, vialanPagination },
   data() {
     return {
       loadData: false,
       sendData: false,
       sotrColumn: undefined,
-      modifer: 1
+      modifer: 1,
+      rowOnPage: 2,
+      page: 1
     };
   },
   computed: {
     ...mapGetters(["User", "allNotes"]),
+    rowsCount() {
+      return this.allNotes.length;
+    },
     sortedNotes() {
-      if (!this.sotrColumn) return this.allNotes;
-
-      const column = this.sotrColumn || "created";
       let array = this.allNotes;
-      return array.sort((a, b) => {
-        if (a[column] < b[column]) return -1 * this.modifer;
-        if (a[column] > b[column]) return 1 * this.modifer;
-        return 0;
-      });
+
+      if (this.sotrColumn) {
+        const column = this.sotrColumn || "created";
+        array.sort((a, b) => {
+          if (a[column] < b[column]) return -1 * this.modifer;
+          if (a[column] > b[column]) return 1 * this.modifer;
+          return 0;
+        });
+      }
+      return array.slice(
+        (this.page - 1) * this.rowOnPage,
+        this.rowOnPage * this.page
+      );
     },
     classObject() {
       return {
@@ -91,6 +122,9 @@ export default {
     }
   },
   methods: {
+    paginationClick(val) {
+      this.page = val;
+    },
     sort(target, column) {
       if (this.sotrColumn === column) {
         this.modifer *= -1;

@@ -45,7 +45,7 @@ export default {
       description: "",
       sendData: false,
       error: undefined,
-      oldData: {}
+      oldData: undefined
     };
   },
   computed: {
