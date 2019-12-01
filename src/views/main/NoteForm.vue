@@ -19,7 +19,7 @@
           <vialan-button
             :value="'отменить'"
             :type="'button'"
-            @click="$router.go(-1)"
+            @click="$router.push('/')"
             :classes="'grey mr-2 back'"
           />
           <vialan-button
