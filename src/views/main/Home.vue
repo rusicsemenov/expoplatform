@@ -185,6 +185,9 @@ export default {
     },
     rowOnPage() {
       this.page = 1;
+      this.$router.push({
+        query: { p: this.page, sort: this.sortColumn, m: this.modifer }
+      });
     },
     $route(to) {
       this.page = to.query.p;
