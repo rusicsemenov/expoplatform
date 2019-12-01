@@ -40,11 +40,15 @@ export default {
     rowsCount: {
       type: Number,
       default: 0
+    },
+    curentPage: {
+      type: Number,
+      default: 1
     }
   },
   data() {
     return {
-      page: 1
+      page: this.curentPage
     };
   },
   computed: {
@@ -55,6 +59,9 @@ export default {
   watch: {
     page(val) {
       this.$emit("click", val);
+    },
+    curentPage(val) {
+      this.page = val;
     }
   }
 };

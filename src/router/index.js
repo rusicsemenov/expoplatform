@@ -80,6 +80,11 @@ router.beforeEach((to, from, next) => {
   document.title = to.meta.title;
   if (reqAuth && !isAuthenticated) {
     next("/login");
+  } else if (
+    isAuthenticated &&
+    (to.path == "/login" || to.path == "/register")
+  ) {
+    next("/");
   } else {
     next();
   }

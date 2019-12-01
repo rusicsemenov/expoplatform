@@ -12,19 +12,19 @@
       <thead>
         <tr>
           <th
-            :class="[classObject, sotrColumn === 'id' ? 'sort' : '']"
+            :class="[classObject, sortColumn === 'id' ? 'sort' : '']"
             @click="sort($event.target, 'id')"
           >
             id
           </th>
           <th
-            :class="[classObject, sotrColumn === 'created' ? 'sort' : '']"
+            :class="[classObject, sortColumn === 'created' ? 'sort' : '']"
             @click="sort($event.target, 'created')"
           >
             create
           </th>
           <th
-            :class="[classObject, sotrColumn === 'title' ? 'sort' : '']"
+            :class="[classObject, sortColumn === 'title' ? 'sort' : '']"
             @click="sort($event.target, 'title')"
           >
             title
@@ -65,6 +65,7 @@
               <vialan-pagination
                 :rowOnPage="rowOnPage"
                 :rowsCount="rowsCount"
+                :curentPage="+page"
                 @click="paginationClick"
               ></vialan-pagination>
             </div>
@@ -87,7 +88,7 @@ export default {
     return {
       loadData: false,
       sendData: false,
-      sotrColumn: undefined,
+      sortColumn: undefined,
       modifer: 1,
       rowOnPage: 2,
       page: 1
@@ -101,14 +102,15 @@ export default {
     sortedNotes() {
       let array = this.allNotes;
 
-      if (this.sotrColumn) {
-        const column = this.sotrColumn || "created";
+      if (this.sortColumn) {
+        const column = this.sortColumn || "created";
         array.sort((a, b) => {
           if (a[column] < b[column]) return -1 * this.modifer;
           if (a[column] > b[column]) return 1 * this.modifer;
           return 0;
         });
       }
+
       return array.slice(
         (this.page - 1) * this.rowOnPage,
         this.rowOnPage * this.page
@@ -123,18 +125,22 @@ export default {
   },
   methods: {
     paginationClick(val) {
+      if (this.page == val) return;
       this.page = val;
     },
     sort(target, column) {
-      if (this.sotrColumn === column) {
+      if (this.sortColumn === column) {
         this.modifer *= -1;
       } else {
         this.modifer = 1;
       }
-      this.sotrColumn = column;
+      this.sortColumn = column;
     },
     editNote(index) {
-      this.$router.push({ name: "editnote", params: { id: index } });
+      this.$router.push({
+        name: "editnote",
+        params: { id: index }
+      });
     },
     async deleteNote(item) {
       this.sendData = true;
@@ -153,7 +159,38 @@ export default {
   async created() {
     this.loadData = true;
     await this.$store.dispatch("getNotes");
+    this.page = this.$route.query.p || 1;
+    this.sortColumn = this.$route.query.sort;
+    this.modifer = this.$route.query.m;
     this.loadData = false;
+  },
+  watch: {
+    page(val) {
+      if (this.$router.history.current.query.p === val) return;
+      this.$router.push({
+        query: { p: val, sort: this.sortColumn, m: this.modifer }
+      });
+    },
+    sortColumn(val) {
+      if (this.$router.history.current.query.sort === val) return;
+      this.$router.push({
+        query: { p: this.page, sort: val, m: this.modifer }
+      });
+    },
+    modifer(val) {
+      if (this.$router.history.current.query.m === val) return;
+      this.$router.push({
+        query: { p: this.page, sort: this.sortColumn, m: val }
+      });
+    },
+    rowOnPage() {
+      this.page = 1;
+    },
+    $route(to) {
+      this.page = to.query.p;
+      this.sortColumn = to.query.sort;
+      this.modifer = to.query.m;
+    }
   }
 };
 </script>

@@ -25,7 +25,6 @@ let project;
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     store.dispatch("setUser", user);
-    router.push("/");
   }
 
   if (project) {
