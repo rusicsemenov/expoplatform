@@ -1,5 +1,5 @@
 <template>
-  <div class="pagination-buttons flex justify-center">
+  <div class="pagination-buttons flex justify-center" v-if="pageCount > 1">
     <vialan-button
       :value="'назад'"
       :type="'button'"
